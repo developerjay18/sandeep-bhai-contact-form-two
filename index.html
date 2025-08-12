@@ -294,8 +294,8 @@
         return lines.join('\n');
       }
 
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
 
         // Reset errors
         emailError.textContent = '';
@@ -322,13 +322,15 @@
           return;
         }
 
-        const text = buildWhatsAppText({ firstName, email, message });
-        const link = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-          text
-        )}`;
+        // Build text the same way as the provided working logic
+        const nameEnc = encodeURIComponent(firstName);
+        const emailEnc = encodeURIComponent(email);
+        const msgEnc = encodeURIComponent(message);
+        const text = `Hello, I have an inquiry!%0A%0AName: ${nameEnc}%0AEmail: ${emailEnc}%0AMessage: ${msgEnc}`;
+        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
 
-        // Redirect to WhatsApp with the pre-filled message
-        window.location.href = link;
+        // Open WhatsApp in a new tab (prevents some browsers from blocking/embedding wa.me)
+        window.open(url, '_blank');
       });
     </script>
   </body>
